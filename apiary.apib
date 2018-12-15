@@ -1,35 +1,52 @@
 FORMAT: 1A
 HOST: http://polls.apiblueprint.org/
 
-# Francisco Javier Fernandez Diez
+# MicroMOOC Subscription API
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+This executable document will describe the structure of the response for the user subscription API for MicroMOOC. Currently this API will just support GET queries. 
 
-## Questions Collection [/questions]
+## Subscriptions [/users/{userId}/subscriptions/?f={format}]
 
-### List All Questions [GET]
+### List an user Susbscription [GET]
 
 + Response 200 (application/json)
 
         [
             {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+                "UserId": "userexample@outlook.com",
+                "subscriptionName": "Enterprise",
+                "expirationDate": "2020-08-05T08:40:51.620Z",
+                "Privileges": {
+                    "edx": [
+                        {
+                            "name": "Introduction to Artificial Intelligence",
+                            "code": "DAT263x",
+                            "organization": {
+                                "displayName": "Microsoft",
+                                "key": "microsoft"
+                            },
+                            "Programs": [
+                                "Microsoft Professional Program in Artificial Intelligence"
+                            ]
+                        },{
+                            "name": "Improving your usage of Python for Artificial Intelligence",
+                            "code": "PYAI201",
+                            "organization": {
+                                "displayName": "MicroMOOC",
+                                "key": "micromooc"
+                            },
+                            "Programs": [
+                                "MicroMOOC Certificate for Pythons Skills",
+                                "Other MicroMOOC Program"
+                            ]
+                        }
+                    ],
+                    "Coupon": [
+                        {
+                        
+                        }
+                    ] 
+                }
             }
         ]
 
