@@ -3,37 +3,174 @@ HOST: http://polls.apiblueprint.org/
 
 # MicroMOOC Subscription API
 
-This executable document will describe the structure of the response for the user subscription API for MicroMOOC. Currently this API will just support GET queries. 
+This executable document will describe the structure of the response for the user subscription API for MicroMOOC. Currently this API will just support GET queries.
 
-## Subscriptions [/users/{userId}/subscriptions/?catalog=edx]
+# Subscription API root [/]
+
+This resource does not have any attributes. Instead it offers the initial API affordances in the form of the links in the JSON body.
+
+It is recommend to follow the “url” link values or Link headers to get to resources instead of constructing your own URLs to keep your client decoupled from implementation details.
+
+## Retrieve the Entry Point [GET]
+
++ Response 200 (application/json)
+        
+        {
+            "users_url": "/users"
+        }
+
+
+## Subscriptions [/users/{userId}/subscriptions/]
+
+A subscriptions response contains the following attributes.
+
+- userId
+- Subscription (an array of Susbscription object)
+
++ Parameters
+    + userId (string, required) ... The user id for listing the subscriptions
+
 
 ### List an user Susbscription [GET]
 
++ Request JSON message
+    + Headers
+
+            Authentication: Bearer JWT
+            Accept: application/json
+
 + Response 200 (application/json)
 
+    + Headers
+
+            Link: </subscriptions?page=2>; rel="next"
+
+    + Body
+
+            {
+                "userId": "userexample@outlook.com",
+                "services": [{
+                    "catalog": "edx",
+                    "name": "edx courses",
+                    "code": "edx_mpp",
+                    "icon": "https://{some_url_prefix}/{image_name}.png",
+                    "description": "free level of edx courses...",
+                    "provider": [{
+                        "key": "microsoft",
+                        "displayName": "Microsoft",
+                        "logo": "https://{some_url_prefix}/{image_name}.png"
+                    }],
+                    "privileges": [{
+                        "courseName":"Introduction to Artificial Intelligence",
+                        "courseCode":"AI263x"
+                        },{
+                        "courseName":"Introduction to Big Data",
+                        "courseCode":"DAT263x"
+                        }]
+                    }
+                ]
+            }
+
++ Response 202 (application/json)
+
         {
-            "userId": "userexample@outlook.com",
-            "subscriptions": [{
-                "catalog": "edx",
-                "name": "edx courses",
-                "code": "edx_mpp",
-                "icon": "https://{some_url_prefix}/{image_name}.png",
-                "description": "free level of edx courses...",
-                "provider": [{
-                    "key": "microsoft",
-                    "displayName": "Microsoft",
-                    "logo": "https://{some_url_prefix}/{image_name}.png"
-                }],
-                "privileges": [{
-                    "courseName":"Introduction to Artificial Intelligence",
-                    "courseCode":"AI263x"
-                    },{
-                    "courseName":"Introduction to Big Data",
-                    "courseCode":"DAT263x"
-                    }]
-                }
-            ]
+            "message": "The request has been accepted for processing, but the processing has not been completed",
+            "code": 202
         }
+
++ Response 301
+
+    + Headers
+
+            Location: http://my-sample-domain.com//users/{userId}/subscriptions/
+
++ Response 302
+
+    + Headers
+
+            Location: http://my-sample-domain.com//users/{userId}/subscriptions/
+
++ Response 400 (application/json)
+
+        {
+            "message": "Invalid request，invalid parameter",
+            "code": 400
+        }
+
++ Response 401 (application/json)
+
+        {
+            "message": "Unauthorized. your credentials are not valid",
+            "code": 401
+        }
+
+
++ Response 404 (application/json)
+
+        {
+            "message": "The requested resource could not be found",
+            "code": 404
+        }
+
++ Response 500 (application/json)
+
+        {
+            "message": "Internal Server Error",
+            "code": 500
+        }
+
++ Response 505 (application/json)
+
+        {
+            "message": "HTTP Version Not Supported",
+            "code": 505
+        }
+
+## Services [/users/{userId}/subscriptions/services/{?catalog}]
+
++ Parameters
+    + userId (string, required) ... The user id to whom the services belong.
+    + catalog (string, optional) ... The specific collection of services to retrieve in the response.
+
+### the valid services for user [GET]
+
++ Request JSON message
+    + Headers
+
+            Authentication: Bearer JWT
+            Accept: application/json
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Link: </subscriptions?page=2>; rel="next"
+
+    + body
+    
+            {
+                "userId": "userexample@outlook.com",
+                "services": [{
+                    "catalog": "edx",
+                    "name": "edx courses",
+                    "code": "edx_mpp",
+                    "icon": "https://{some_url_prefix}/{image_name}.png",
+                    "description": "free level of edx courses...",
+                    "provider": [{
+                        "key": "microsoft",
+                        "displayName": "Microsoft",
+                        "logo": "https://{some_url_prefix}/{image_name}.png"
+                    }],
+                    "privileges": [{
+                        "courseName":"Introduction to Artificial Intelligence",
+                        "courseCode":"AI263x",
+                    },{
+                        "courseName":"Introduction to Big Data",
+                        "courseCode":"DAT263x",
+                    },
+                    ]
+                }]
+            }
 
 + Response 202 (application/json)
 
@@ -64,7 +201,7 @@ This executable document will describe the structure of the response for the use
 + Response 401 (application/json)
 
         {
-            "message": "unauthorized. your credentials are not valid",
+            "message": "Unauthorized. your credentials are not valid",
             "code": 401
         }
 
@@ -88,34 +225,4 @@ This executable document will describe the structure of the response for the use
         {
             "message": "HTTP Version Not Supported",
             "code": 505
-        }
-
-## Subscriptions [/users/{userId}/subscriptions/services/?catalog=edx]
-
-### the valid services for user [GET]
-
-+ Response 200 (application/json)
-
-        {
-            "userId": "userexample@outlook.com",
-            "services": [{
-                "catalog": "edx",
-                "name": "edx courses",
-                "code": "edx_mpp",
-                "icon": "https://{some_url_prefix}/{image_name}.png",
-                "description": "free level of edx courses...",
-                "provider": [{
-                    "key": "microsoft",
-                    "displayName": "Microsoft",
-                    "logo": "https://{some_url_prefix}/{image_name}.png"
-                }],
-                "privileges": [{
-                    "courseName":"Introduction to Artificial Intelligence",
-                    "courseCode":"AI263x",
-                },{
-                    "courseName":"Introduction to Big Data",
-                    "courseCode":"DAT263x",
-                },
-                ]
-            }]
         }
