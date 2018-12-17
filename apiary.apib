@@ -5,93 +5,117 @@ HOST: http://polls.apiblueprint.org/
 
 This executable document will describe the structure of the response for the user subscription API for MicroMOOC. Currently this API will just support GET queries. 
 
-## Subscriptions [/users/{userId}/subscriptions/?f={format}]
+## Subscriptions [/users/{userId}/subscriptions/?catalog=edx]
 
 ### List an user Susbscription [GET]
 
 + Response 200 (application/json)
 
-        [
-            {
-                "UserId": "userexample@outlook.com",
-                "subscriptionName": "Enterprise",
-                "expirationDate": "2020-08-05T08:40:51.620Z",
-                "Privileges": {
-                    "edx": [
-                        {
-                            "name": "Introduction to Artificial Intelligence",
-                            "code": "DAT263x",
-                            "organization": {
-                                "displayName": "Microsoft",
-                                "key": "microsoft"
-                            },
-                            "Programs": [
-                                "Microsoft Professional Program in Artificial Intelligence"
-                            ]
-                        },{
-                            "name": "Improving your usage of Python for Artificial Intelligence",
-                            "code": "PYAI201",
-                            "organization": {
-                                "displayName": "MicroMOOC",
-                                "key": "micromooc"
-                            },
-                            "Programs": [
-                                "MicroMOOC Certificate for Pythons Skills",
-                                "Other MicroMOOC Program"
-                            ]
-                        }
-                    ],
-                    "Coupon": [
-                        {
-                        
-                        }
-                    ] 
-                }
-            }
-        ]
-
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ Request (application/json)
-
         {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
+            "userId": "userexample@outlook.com",
+            "subscriptions": [{
+                "catalog": "edx",
+                "name": "edx courses",
+                "code": "edx_mpp",
+                "icon": "https://{some_url_prefix}/{image_name}.png",
+                "description": "free level of edx courses...",
+                "provider": [{
+                    "key": "microsoft",
+                    "displayName": "Microsoft",
+                    "logo": "https://{some_url_prefix}/{image_name}.png"
+                }],
+                "privileges": [{
+                    "courseName":"Introduction to Artificial Intelligence",
+                    "courseCode":"AI263x"
+                    },{
+                    "courseName":"Introduction to Big Data",
+                    "courseCode":"DAT263x"
+                    }]
+                }
             ]
         }
 
-+ Response 201 (application/json)
++ Response 202 (application/json)
+
+        {
+            "message": "The request has been accepted for processing, but the processing has not been completed",
+            "code": 202
+        }
+
++ Response 301
 
     + Headers
 
-            Location: /questions/2
+            Location: http://my-sample-domain.com//users/{userId}/subscriptions/?catalog=edx
 
-    + Body
++ Response 302
 
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
+    + Headers
+
+            Location: http://my-sample-domain.com//users/{userId}/subscriptions/?catalog=edx
+
++ Response 400 (application/json)
+
+        {
+            "message": "Invalid request，invalid parameter",
+            "code": 400
+        }
+
++ Response 401 (application/json)
+
+        {
+            "message": "unauthorized. your credentials are not valid",
+            "code": 401
+        }
+
+
++ Response 404 (application/json)
+
+        {
+            "message": "The requested resource could not be found",
+            "code": 404
+        }
+
++ Response 500 (application/json)
+
+        {
+            "message": "Internal Server Error",
+            "code": 500
+        }
+
++ Response 505 (application/json)
+
+        {
+            "message": "HTTP Version Not Supported",
+            "code": 505
+        }
+
+## Subscriptions [/users/{userId}/subscriptions/services/?catalog=edx]
+
+### the valid services for user [GET]
+
++ Response 200 (application/json)
+
+        {
+            "userId": "userexample@outlook.com",
+            "services": [{
+                "catalog": "edx",
+                "name": "edx courses",
+                "code": "edx_mpp",
+                "icon": "https://{some_url_prefix}/{image_name}.png",
+                "description": "free level of edx courses...",
+                "provider": [{
+                    "key": "microsoft",
+                    "displayName": "Microsoft",
+                    "logo": "https://{some_url_prefix}/{image_name}.png"
+                }],
+                "privileges": [{
+                    "courseName":"Introduction to Artificial Intelligence",
+                    "courseCode":"AI263x",
+                },{
+                    "courseName":"Introduction to Big Data",
+                    "courseCode":"DAT263x",
+                },
                 ]
-            }
+            }]
+        }
