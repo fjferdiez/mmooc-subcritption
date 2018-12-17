@@ -49,26 +49,29 @@ A subscriptions response contains the following attributes.
 
             {
                 "userId": "userexample@outlook.com",
-                "services": [{
-                    "catalog": "edx",
-                    "name": "edx courses",
-                    "code": "edx_mpp",
-                    "icon": "https://{some_url_prefix}/{image_name}.png",
-                    "description": "free level of edx courses...",
-                    "provider": [{
-                        "key": "microsoft",
-                        "displayName": "Microsoft",
-                        "logo": "https://{some_url_prefix}/{image_name}.png"
-                    }],
-                    "privileges": [{
-                        "courseName":"Introduction to Artificial Intelligence",
-                        "courseCode":"AI263x"
-                        },{
-                        "courseName":"Introduction to Big Data",
-                        "courseCode":"DAT263x"
+                "subscriptions": [{
+                    "name": "Enterprise Subscription",
+                    "expiration": "2020-11-11T08:40:51.620Z",
+                    "services": [{
+                        "catalog": "edx",
+                        "name": "edx courses",
+                        "code": "edx_mpp",
+                        "icon": "https://{some_url_prefix}/{image_name}.png",
+                        "description": "free level of edx courses...",
+                        "provider": [{
+                            "key": "microsoft",
+                            "displayName": "Microsoft",
+                            "logo": "https://{some_url_prefix}/{image_name}.png"
+                        }],
+                        "privileges": [{
+                            "courseName":"Introduction to Artificial Intelligence",
+                            "courseCode":"AI263x"
+                            },{
+                            "courseName":"Introduction to Big Data",
+                            "courseCode":"DAT263x"
                         }]
-                    }
-                ]
+                    }]
+                }]
             }
 
 + Response 202 (application/json)
@@ -82,13 +85,13 @@ A subscriptions response contains the following attributes.
 
     + Headers
 
-            Location: http://my-sample-domain.com//users/{userId}/subscriptions/
+            Location: http://my-sample-domain.com/users/{userId}/subscriptions/
 
 + Response 302
 
     + Headers
 
-            Location: http://my-sample-domain.com//users/{userId}/subscriptions/
+            Location: http://my-sample-domain.com/users/{userId}/subscriptions/
 
 + Response 400 (application/json)
 
@@ -100,7 +103,7 @@ A subscriptions response contains the following attributes.
 + Response 401 (application/json)
 
         {
-            "message": "Unauthorized. your credentials are not valid",
+            "message": "Unauthorized. Your credentials are not valid",
             "code": 401
         }
 
@@ -163,12 +166,11 @@ A subscriptions response contains the following attributes.
                     }],
                     "privileges": [{
                         "courseName":"Introduction to Artificial Intelligence",
-                        "courseCode":"AI263x",
+                        "courseCode":"AI263x"
                     },{
                         "courseName":"Introduction to Big Data",
-                        "courseCode":"DAT263x",
-                    },
-                    ]
+                        "courseCode":"DAT263x"
+                    }]
                 }]
             }
 
@@ -183,13 +185,13 @@ A subscriptions response contains the following attributes.
 
     + Headers
 
-            Location: http://my-sample-domain.com//users/{userId}/subscriptions/?catalog=edx
+            Location: http://my-sample-domain.com/users/{userId}/subscriptions/?catalog=edx
 
 + Response 302
 
     + Headers
 
-            Location: http://my-sample-domain.com//users/{userId}/subscriptions/?catalog=edx
+            Location: http://my-sample-domain.com/users/{userId}/subscriptions/?catalog=edx
 
 + Response 400 (application/json)
 
@@ -201,7 +203,7 @@ A subscriptions response contains the following attributes.
 + Response 401 (application/json)
 
         {
-            "message": "Unauthorized. your credentials are not valid",
+            "message": "Unauthorized. Your credentials are not valid",
             "code": 401
         }
 
